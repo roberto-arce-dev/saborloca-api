@@ -1,9 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as multipart from '@fastify/multipart';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -14,7 +18,7 @@ async function bootstrap() {
   await app.register(multipart, {
     limits: { fileSize: 5 * 1024 * 1024 },
   });
-
+  const configService = app.get(ConfigService);
   app.enableCors();
 
   app.useGlobalPipes(
@@ -42,7 +46,10 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
-    .addTag('Autenticación', 'Endpoints de login, registro y gestión de usuarios')
+    .addTag(
+      'Autenticación',
+      'Endpoints de login, registro y gestión de usuarios',
+    )
     .addTag('Upload', 'Endpoints para subida de imágenes')
     .build();
 
@@ -60,10 +67,9 @@ async function bootstrap() {
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
     ],
   });
-
-  const port = process.env.PORT || 3000;
+  const port = configService.get<number>('config.app.port') || 3000;
   await app.listen(port, '0.0.0.0');
-  
+
   console.log('\n🚀 API: http://localhost:' + port + '/api');
   console.log('📚 Swagger: http://localhost:' + port + '/api/docs\n');
 }
