@@ -1,0 +1,574 @@
+{
+  "info": {
+    "name": "saborlocal API - Completa",
+    "description": "Colección completa con todos los endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3008/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.data.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@sistema.com\",\n  \"password\": \"Admin123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"USUARIO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "List Users (Admin)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/auth/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{"key": "file", "type": "file", "src": []}]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload/image",
+              "host": ["{{baseUrl}}"],
+              "path": ["upload", "image"]
+            }
+          }
+        }
+      ]
+    }
+,
+    {
+      "name": "Productor",
+      "item": [
+        {
+          "name": "Create Productor",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Productor\",\n  \"descripcion\": \"Descripción\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productor",
+              "host": ["{{baseUrl}}"],
+              "path": ["productor"]
+            }
+          }
+        },
+        {
+          "name": "List Productor",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/productor",
+              "host": ["{{baseUrl}}"],
+              "path": ["productor"]
+            }
+          }
+        },
+        {
+          "name": "Get Productor by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/productor/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["productor", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Update Productor",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Productor Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productor/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["productor", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Delete Productor",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/productor/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["productor", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Upload Image to Productor",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{"key": "file", "type": "file", "src": []}]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productor/:id/upload-image",
+              "host": ["{{baseUrl}}"],
+              "path": ["productor", ":id", "upload-image"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        }
+      ]
+    }
+,
+    {
+      "name": "Producto",
+      "item": [
+        {
+          "name": "Create Producto",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Producto\",\n  \"descripcion\": \"Descripción\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/producto",
+              "host": ["{{baseUrl}}"],
+              "path": ["producto"]
+            }
+          }
+        },
+        {
+          "name": "List Producto",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/producto",
+              "host": ["{{baseUrl}}"],
+              "path": ["producto"]
+            }
+          }
+        },
+        {
+          "name": "Get Producto by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/producto/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["producto", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Update Producto",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Producto Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/producto/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["producto", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Delete Producto",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/producto/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["producto", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Upload Image to Producto",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{"key": "file", "type": "file", "src": []}]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/producto/:id/upload-image",
+              "host": ["{{baseUrl}}"],
+              "path": ["producto", ":id", "upload-image"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        }
+      ]
+    }
+,
+    {
+      "name": "Pedido",
+      "item": [
+        {
+          "name": "Create Pedido",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Pedido\",\n  \"descripcion\": \"Descripción\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedido",
+              "host": ["{{baseUrl}}"],
+              "path": ["pedido"]
+            }
+          }
+        },
+        {
+          "name": "List Pedido",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pedido",
+              "host": ["{{baseUrl}}"],
+              "path": ["pedido"]
+            }
+          }
+        },
+        {
+          "name": "Get Pedido by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pedido/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["pedido", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Update Pedido",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pedido Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedido/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["pedido", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Delete Pedido",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/pedido/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["pedido", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Upload Image to Pedido",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{"key": "file", "type": "file", "src": []}]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedido/:id/upload-image",
+              "host": ["{{baseUrl}}"],
+              "path": ["pedido", ":id", "upload-image"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        }
+      ]
+    }
+,
+    {
+      "name": "Cliente",
+      "item": [
+        {
+          "name": "Create Cliente",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Cliente\",\n  \"descripcion\": \"Descripción\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cliente",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente"]
+            }
+          }
+        },
+        {
+          "name": "List Cliente",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cliente",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente"]
+            }
+          }
+        },
+        {
+          "name": "Get Cliente by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cliente/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Update Cliente",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cliente/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Delete Cliente",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/cliente/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Upload Image to Cliente",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{"key": "file", "type": "file", "src": []}]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cliente/:id/upload-image",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente", ":id", "upload-image"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        }
+      ]
+    }
+,
+    {
+      "name": "Entrega",
+      "item": [
+        {
+          "name": "Create Entrega",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Entrega\",\n  \"descripcion\": \"Descripción\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entrega",
+              "host": ["{{baseUrl}}"],
+              "path": ["entrega"]
+            }
+          }
+        },
+        {
+          "name": "List Entrega",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/entrega",
+              "host": ["{{baseUrl}}"],
+              "path": ["entrega"]
+            }
+          }
+        },
+        {
+          "name": "Get Entrega by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/entrega/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["entrega", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Update Entrega",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Entrega Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entrega/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["entrega", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Delete Entrega",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/entrega/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["entrega", ":id"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        },
+        {
+          "name": "Upload Image to Entrega",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{"key": "file", "type": "file", "src": []}]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entrega/:id/upload-image",
+              "host": ["{{baseUrl}}"],
+              "path": ["entrega", ":id", "upload-image"],
+              "variable": [{"key": "id", "value": ""}]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,489 @@
+{
+  "info": {
+    "name": "Saborlocal API - Upload",
+    "description": "Colección de Postman para endpoints de upload de imágenes en Saborlocal API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload Image",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Imagen a subir (JPG, PNG, etc.) - Máximo 5MB"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/upload/image",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "upload",
+            "image"
+          ]
+        },
+        "description": "Sube una imagen al servidor y genera un thumbnail automáticamente"
+      },
+      "response": [
+        {
+          "name": "Upload exitoso",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload/image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload",
+                "image"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"message\": \"Imagen subida exitosamente\",\n  \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n  \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Upload por Entidad",
+      "item": [
+        {
+          "name": "Upload Usuario Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Imagen para Usuario"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuario/{{id}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuario",
+                "{{id}}",
+                "upload-image"
+              ]
+            },
+            "description": "Sube una imagen y la asocia al Usuario especificado"
+          },
+          "response": [
+            {
+              "name": "Upload exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/usuario/507f1f77bcf86cd799439011/upload-image",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "usuario",
+                    "507f1f77bcf86cd799439011",
+                    "upload-image"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"usuario\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Restaurante Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Imagen para Restaurante"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/restaurante/{{id}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "restaurante",
+                "{{id}}",
+                "upload-image"
+              ]
+            },
+            "description": "Sube una imagen y la asocia al Restaurante especificado"
+          },
+          "response": [
+            {
+              "name": "Upload exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/restaurante/507f1f77bcf86cd799439011/upload-image",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "restaurante",
+                    "507f1f77bcf86cd799439011",
+                    "upload-image"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"restaurante\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Propietario Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Imagen para Propietario"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/propietario/{{id}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "propietario",
+                "{{id}}",
+                "upload-image"
+              ]
+            },
+            "description": "Sube una imagen y la asocia al Propietario especificado"
+          },
+          "response": [
+            {
+              "name": "Upload exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/propietario/507f1f77bcf86cd799439011/upload-image",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "propietario",
+                    "507f1f77bcf86cd799439011",
+                    "upload-image"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"propietario\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Menu Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Imagen para Menu"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/menu/{{id}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "menu",
+                "{{id}}",
+                "upload-image"
+              ]
+            },
+            "description": "Sube una imagen y la asocia al Menu especificado"
+          },
+          "response": [
+            {
+              "name": "Upload exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/menu/507f1f77bcf86cd799439011/upload-image",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "menu",
+                    "507f1f77bcf86cd799439011",
+                    "upload-image"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"menu\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Reserva Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Imagen para Reserva"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reserva/{{id}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reserva",
+                "{{id}}",
+                "upload-image"
+              ]
+            },
+            "description": "Sube una imagen y la asocia al Reserva especificado"
+          },
+          "response": [
+            {
+              "name": "Upload exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/reserva/507f1f77bcf86cd799439011/upload-image",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "reserva",
+                    "507f1f77bcf86cd799439011",
+                    "upload-image"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"reserva\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Endpoints para subir y asociar imágenes a entidades específicas"
+    },
+    {
+      "name": "Servir Imágenes",
+      "item": [
+        {
+          "name": "Get Image",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3008/uploads/{{filename}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3008",
+              "path": [
+                "uploads",
+                "{{filename}}"
+              ]
+            },
+            "description": "Obtiene una imagen subida previamente"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Thumbnail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3008/uploads/thumbnails/{{filename}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3008",
+              "path": [
+                "uploads",
+                "thumbnails",
+                "{{filename}}"
+              ]
+            },
+            "description": "Obtiene un thumbnail generado automáticamente"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints para servir imágenes y thumbnails"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3008/api",
+      "type": "string"
+    }
+  ]
+}

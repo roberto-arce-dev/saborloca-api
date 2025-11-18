@@ -1,0 +1,810 @@
+openapi: 3.0.0
+info:
+  title: saborlocal API
+  description: API REST completa con autenticación JWT y CRUD de entidades
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3008/api
+    description: Servidor de desarrollo
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: admin@sistema.com
+        password:
+          type: string
+          example: Admin123456
+
+    RegisterRequest:
+      type: object
+      required:
+        - nombre
+        - email
+        - password
+        - role
+      properties:
+        nombre:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        createdAt:
+          type: string
+
+    EntityBase:
+      type: object
+      properties:
+        _id:
+          type: string
+        nombre:
+          type: string
+        descripcion:
+          type: string
+        imagen:
+          type: string
+        imagenThumbnail:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Autenticación
+      summary: Iniciar sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login exitoso
+        '401':
+          description: Credenciales inválidas
+
+  /auth/register:
+    post:
+      tags:
+        - Autenticación
+      summary: Registrar usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Usuario registrado
+        '409':
+          description: Email ya existe
+
+  /auth/profile:
+    get:
+      tags:
+        - Autenticación
+      summary: Obtener perfil
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Perfil obtenido
+
+  /auth/users:
+    get:
+      tags:
+        - Autenticación
+      summary: Listar usuarios (Admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios
+
+  /upload/image:
+    post:
+      tags:
+        - Upload
+      summary: Subir imagen
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Imagen subida
+
+  /productor:
+    get:
+      tags:
+        - Productor
+      summary: Listar todos los Productors
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de Productors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityBase'
+    post:
+      tags:
+        - Productor
+      summary: Crear Productor
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '201':
+          description: Productor creado
+
+  /productor/{id}:
+    get:
+      tags:
+        - Productor
+      summary: Obtener Productor por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Productor encontrado
+        '404':
+          description: Productor no encontrado
+    patch:
+      tags:
+        - Productor
+      summary: Actualizar Productor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '200':
+          description: Productor actualizado
+    delete:
+      tags:
+        - Productor
+      summary: Eliminar Productor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Productor eliminado
+
+  /productor/{id}/upload-image:
+    post:
+      tags:
+        - Productor
+      summary: Subir imagen a Productor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Imagen subida
+
+  /producto:
+    get:
+      tags:
+        - Producto
+      summary: Listar todos los Productos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de Productos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityBase'
+    post:
+      tags:
+        - Producto
+      summary: Crear Producto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '201':
+          description: Producto creado
+
+  /producto/{id}:
+    get:
+      tags:
+        - Producto
+      summary: Obtener Producto por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto encontrado
+        '404':
+          description: Producto no encontrado
+    patch:
+      tags:
+        - Producto
+      summary: Actualizar Producto
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '200':
+          description: Producto actualizado
+    delete:
+      tags:
+        - Producto
+      summary: Eliminar Producto
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado
+
+  /producto/{id}/upload-image:
+    post:
+      tags:
+        - Producto
+      summary: Subir imagen a Producto
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Imagen subida
+
+  /pedido:
+    get:
+      tags:
+        - Pedido
+      summary: Listar todos los Pedidos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de Pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityBase'
+    post:
+      tags:
+        - Pedido
+      summary: Crear Pedido
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '201':
+          description: Pedido creado
+
+  /pedido/{id}:
+    get:
+      tags:
+        - Pedido
+      summary: Obtener Pedido por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pedido encontrado
+        '404':
+          description: Pedido no encontrado
+    patch:
+      tags:
+        - Pedido
+      summary: Actualizar Pedido
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '200':
+          description: Pedido actualizado
+    delete:
+      tags:
+        - Pedido
+      summary: Eliminar Pedido
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pedido eliminado
+
+  /pedido/{id}/upload-image:
+    post:
+      tags:
+        - Pedido
+      summary: Subir imagen a Pedido
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Imagen subida
+
+  /cliente:
+    get:
+      tags:
+        - Cliente
+      summary: Listar todos los Clientes
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de Clientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityBase'
+    post:
+      tags:
+        - Cliente
+      summary: Crear Cliente
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '201':
+          description: Cliente creado
+
+  /cliente/{id}:
+    get:
+      tags:
+        - Cliente
+      summary: Obtener Cliente por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente encontrado
+        '404':
+          description: Cliente no encontrado
+    patch:
+      tags:
+        - Cliente
+      summary: Actualizar Cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '200':
+          description: Cliente actualizado
+    delete:
+      tags:
+        - Cliente
+      summary: Eliminar Cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente eliminado
+
+  /cliente/{id}/upload-image:
+    post:
+      tags:
+        - Cliente
+      summary: Subir imagen a Cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Imagen subida
+
+  /entrega:
+    get:
+      tags:
+        - Entrega
+      summary: Listar todos los Entregas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de Entregas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EntityBase'
+    post:
+      tags:
+        - Entrega
+      summary: Crear Entrega
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '201':
+          description: Entrega creado
+
+  /entrega/{id}:
+    get:
+      tags:
+        - Entrega
+      summary: Obtener Entrega por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Entrega encontrado
+        '404':
+          description: Entrega no encontrado
+    patch:
+      tags:
+        - Entrega
+      summary: Actualizar Entrega
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        '200':
+          description: Entrega actualizado
+    delete:
+      tags:
+        - Entrega
+      summary: Eliminar Entrega
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Entrega eliminado
+
+  /entrega/{id}/upload-image:
+    post:
+      tags:
+        - Entrega
+      summary: Subir imagen a Entrega
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Imagen subida
