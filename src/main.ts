@@ -67,7 +67,7 @@ async function bootstrap() {
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
     ],
   });
-  const port = configService.get<number>('config.app.port') || 3000;
+  const port = configService.get<number>('config.app.port') || 3008;
   await app.listen(port, '0.0.0.0');
 
   console.log('\n🚀 API: http://localhost:' + port + '/api');
