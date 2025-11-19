@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -21,6 +23,23 @@ import { EntregaModule } from './entrega/entrega.module';
         dbName: 'saborlocal_db',
       }),
     }),
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 1000, // 1 segundo
+        limit: 3, // 3 requests por segundo
+      },
+      {
+        name: 'medium',
+        ttl: 10000, // 10 segundos
+        limit: 20, // 20 requests por 10 segundos
+      },
+      {
+        name: 'long',
+        ttl: 60000, // 1 minuto
+        limit: 100, // 100 requests por minuto
+      },
+    ]),
     AuthModule,
     UploadModule,
     ProductorModule,
@@ -30,6 +49,12 @@ import { EntregaModule } from './entrega/entrega.module';
     EntregaModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
