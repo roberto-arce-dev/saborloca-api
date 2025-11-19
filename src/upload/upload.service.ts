@@ -5,8 +5,18 @@ import * as path from 'path';
 
 @Injectable()
 export class UploadService {
-  private readonly uploadPath = 'public/uploads';
-  private readonly thumbnailPath = 'public/uploads/thumbnails';
+  private readonly uploadPath = 'uploads';
+  private readonly thumbnailPath = 'uploads/thumbnails';
+
+  constructor() {
+    // Crear directorios si no existen
+    if (!fs.existsSync(this.uploadPath)) {
+      fs.mkdirSync(this.uploadPath, { recursive: true });
+    }
+    if (!fs.existsSync(this.thumbnailPath)) {
+      fs.mkdirSync(this.thumbnailPath, { recursive: true });
+    }
+  }
 
   async uploadImage(
     file: Express.Multer.File,
@@ -45,7 +55,7 @@ export class UploadService {
   }
 
   async deleteImage(imagePath: string): Promise<void> {
-    const fullPath = path.join('public', imagePath);
+    const fullPath = imagePath.startsWith('uploads/') ? imagePath : path.join('uploads', imagePath);
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
     }
