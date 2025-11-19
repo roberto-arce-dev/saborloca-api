@@ -8,6 +8,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as multipart from '@fastify/multipart';
 import { ConfigService } from '@nestjs/config';
+import * as fastifyStatic from '@fastify/static';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,6 +20,13 @@ async function bootstrap() {
   await app.register(multipart, {
     limits: { fileSize: 5 * 1024 * 1024 },
   });
+
+  // Configurar archivos estáticos para uploads
+  await app.register(fastifyStatic, {
+    root: join(process.cwd(), 'uploads'),
+    prefix: '/uploads/',
+  });
+
   const configService = app.get(ConfigService);
   app.enableCors();
 
