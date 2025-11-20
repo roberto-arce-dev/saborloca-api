@@ -7,12 +7,16 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { Role } from './enums/roles.enum';
 import { User, UserDocument } from './schemas/user.schema';
+import { ClienteProfileService } from '../cliente-profile/cliente-profile.service';
+import { ProductorProfileService } from '../productor-profile/productor-profile.service';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
+    private clienteProfileService: ClienteProfileService,
+    private productorProfileService: ProductorProfileService,
   ) {}
 
   async onModuleInit() {
@@ -25,7 +29,6 @@ export class AuthService implements OnModuleInit {
     if (!existingAdmin) {
       const hashedPassword = await bcrypt.hash('Admin123456', 10);
       await this.userModel.create({
-        nombre: 'Administrador',
         email: 'admin@sistema.com',
         password: hashedPassword,
         role: Role.ADMIN,
@@ -35,7 +38,8 @@ export class AuthService implements OnModuleInit {
   }
 
   /**
-   * Registro público - Solo permite crear CLIENTES
+   * Registro público - Crea User + Profile correspondiente según el rol
+   * Factory Pattern: Crea el tipo de profile según el rol
    */
   async register(registerDto: RegisterDto) {
     const existingUser = await this.userModel.findOne({ email: registerDto.email });
@@ -45,52 +49,48 @@ export class AuthService implements OnModuleInit {
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
-    // Auto-registro siempre crea CLIENTES
+    // 1. Crear User (solo autenticación)
     const newUser = await this.userModel.create({
-      nombre: registerDto.nombre,
       email: registerDto.email,
       password: hashedPassword,
-      role: Role.CLIENTE,  // ← Forzar rol CLIENTE
+      role: registerDto.role,
     });
 
-    const userObject = newUser.toObject();
-    const { password, ...userWithoutPassword } = userObject;
+    try {
+      // 2. Crear Profile según el rol (Factory Pattern)
+      if (registerDto.role === Role.CLIENTE) {
+        await this.clienteProfileService.create(newUser._id.toString(), {
+          nombre: registerDto.nombre,
+          telefono: registerDto.telefono,
+          direccion: registerDto.direccion,
+        });
+      } else if (registerDto.role === Role.PRODUCTOR) {
+        await this.productorProfileService.create(newUser._id.toString(), {
+          nombreNegocio: registerDto.nombreNegocio,
+          nombreContacto: registerDto.nombre,
+          telefono: registerDto.telefono,
+          direccion: registerDto.direccion,
+          descripcion: registerDto.descripcion,
+        });
+      }
 
-    return {
-      user: userWithoutPassword,
-      access_token: this.generateToken(userObject),
-    };
-  }
+      const userObject = newUser.toObject();
+      const { password, ...userWithoutPassword } = userObject;
 
-  /**
-   * Crear usuario PRODUCTOR - Solo ADMIN puede hacerlo
-   */
-  async createProductorUser(createProductorDto: any) {
-    const existingUser = await this.userModel.findOne({ email: createProductorDto.email });
-    if (existingUser) {
-      throw new ConflictException('El email ya está registrado');
+      return {
+        user: userWithoutPassword,
+        access_token: this.generateToken(userObject),
+      };
+    } catch (error) {
+      // Si falla la creación del profile, eliminar el user creado (rollback)
+      await this.userModel.findByIdAndDelete(newUser._id);
+      throw error;
     }
-
-    const hashedPassword = await bcrypt.hash(createProductorDto.password, 10);
-
-    const newUser = await this.userModel.create({
-      nombre: createProductorDto.nombre,
-      email: createProductorDto.email,
-      password: hashedPassword,
-      role: Role.PRODUCTOR,  // ← Crear como PRODUCTOR
-    });
-
-    const userObject = newUser.toObject();
-    const { password, ...userWithoutPassword } = userObject;
-
-    return {
-      user: userWithoutPassword,
-      access_token: this.generateToken(userObject),
-    };
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.userModel.findOne({ email: loginDto.email });
+    // select('+password') para incluir el password que está oculto por defecto
+    const user = await this.userModel.findOne({ email: loginDto.email }).select('+password');
 
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');

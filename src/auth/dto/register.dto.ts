@@ -1,20 +1,20 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  IsEnum,
+  IsOptional,
+  ValidateIf,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Role } from '../enums/roles.enum';
 
 /**
- * DTO para registro público de CLIENTES
- * Solo los clientes pueden auto-registrarse desde la app.
- * Los productores deben ser creados por ADMIN.
+ * DTO para registro de usuarios (CLIENTE o PRODUCTOR)
+ * Crea User + Profile correspondiente según el rol
  */
 export class RegisterDto {
-  @ApiProperty({
-    example: 'Juan Pérez',
-    description: 'Nombre completo del usuario',
-  })
-  @IsNotEmpty()
-  @IsString()
-  nombre: string;
-
   @ApiProperty({
     example: 'juan@example.com',
     description: 'Email del usuario',
@@ -34,18 +34,54 @@ export class RegisterDto {
   password: string;
 
   @ApiProperty({
-    example: '+56912345678',
-    description: 'Teléfono del cliente (opcional)',
-    required: false,
+    example: Role.CLIENTE,
+    description: 'Rol del usuario (CLIENTE o PRODUCTOR)',
+    enum: [Role.CLIENTE, Role.PRODUCTOR],
   })
+  @IsNotEmpty()
+  @IsEnum([Role.CLIENTE, Role.PRODUCTOR])
+  role: Role;
+
+  // Campos comunes (se usan según el rol)
+  @ApiProperty({
+    example: 'Juan Pérez',
+    description: 'Nombre completo (si CLIENTE) o nombre de contacto (si PRODUCTOR)',
+  })
+  @IsNotEmpty()
+  @IsString()
+  nombre: string;
+
+  @ApiPropertyOptional({
+    example: '+51 987654321',
+    description: 'Teléfono de contacto',
+  })
+  @IsOptional()
   @IsString()
   telefono?: string;
 
-  @ApiProperty({
-    example: 'Av. Principal 123, Santiago',
-    description: 'Dirección del cliente (opcional)',
-    required: false,
+  @ApiPropertyOptional({
+    example: 'Av. Principal 123, Lima',
+    description: 'Dirección',
   })
+  @IsOptional()
   @IsString()
   direccion?: string;
+
+  // Campos específicos para PRODUCTOR
+  @ApiPropertyOptional({
+    example: 'Frutas del Valle',
+    description: 'Nombre del negocio (solo para PRODUCTOR)',
+  })
+  @ValidateIf((o) => o.role === Role.PRODUCTOR)
+  @IsNotEmpty({ message: 'nombreNegocio es requerido para PRODUCTOR' })
+  @IsString()
+  nombreNegocio?: string;
+
+  @ApiPropertyOptional({
+    example: 'Producimos frutas orgánicas de calidad',
+    description: 'Descripción del negocio (solo para PRODUCTOR)',
+  })
+  @IsOptional()
+  @IsString()
+  descripcion?: string;
 }

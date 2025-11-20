@@ -10,6 +10,8 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { User, UserSchema } from './schemas/user.schema';
 import { APP_GUARD } from '@nestjs/core';
+import { ClienteProfileModule } from '../cliente-profile/cliente-profile.module';
+import { ProductorProfileModule } from '../productor-profile/productor-profile.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { APP_GUARD } from '@nestjs/core';
         },
       }),
     }),
+    ClienteProfileModule, // Importar para usar el service
+    ProductorProfileModule, // Importar para usar el service
   ],
   controllers: [AuthController],
   providers: [
