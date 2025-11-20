@@ -12,6 +12,8 @@ import { ProductoModule } from './producto/producto.module';
 import { PedidoModule } from './pedido/pedido.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { EntregaModule } from './entrega/entrega.module';
+import { ClienteProfileModule } from './cliente-profile/cliente-profile.module';
+import { ProductorProfileModule } from './productor-profile/productor-profile.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -47,6 +49,8 @@ import { EntregaModule } from './entrega/entrega.module';
     PedidoModule,
     ClienteModule,
     EntregaModule,
+    ClienteProfileModule,
+    ProductorProfileModule,
   ],
   controllers: [AppController],
   providers: [

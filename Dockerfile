@@ -48,6 +48,7 @@ EXPOSE 3008
 # Variables de entorno por defecto
 ENV NODE_ENV=production
 ENV PORT=3008
+EXPOSE 3008
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
