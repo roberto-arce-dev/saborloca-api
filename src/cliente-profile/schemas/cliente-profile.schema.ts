@@ -29,7 +29,6 @@ export class ClienteProfile {
     type: {
       type: String,
       enum: ['Point'],
-      default: 'Point',
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
@@ -57,5 +56,5 @@ export const ClienteProfileSchema = SchemaFactory.createForClass(ClienteProfile)
 
 // Indexes para optimizar queries
 ClienteProfileSchema.index({ user: 1 }, { unique: true });
-ClienteProfileSchema.index({ ubicacion: '2dsphere' }); // Para queries geoespaciales
+ClienteProfileSchema.index({ ubicacion: '2dsphere' }, { sparse: true }); // Para queries geoespaciales (sparse = solo si existe)
 ClienteProfileSchema.index({ isActive: 1 });

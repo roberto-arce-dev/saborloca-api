@@ -11,7 +11,6 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nes
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { CreateProductorUserDto } from './dto/create-productor-user.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { Roles } from './decorators/roles.decorator';
@@ -29,38 +28,17 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
-    summary: 'Registrar nuevo CLIENTE',
-    description: 'Endpoint público para auto-registro de clientes. Solo se pueden registrar como CLIENTE.',
+    summary: 'Registrar nuevo usuario',
+    description: 'Endpoint público para auto-registro. Se puede registrar como CLIENTE o PRODUCTOR.',
   })
   @ApiBody({ type: RegisterDto })
-  @ApiResponse({ status: 201, description: 'Cliente registrado exitosamente' })
+  @ApiResponse({ status: 201, description: 'Usuario registrado exitosamente' })
   @ApiResponse({ status: 409, description: 'El email ya está registrado' })
   async register(@Body() registerDto: RegisterDto) {
     const result = await this.authService.register(registerDto);
     return {
       success: true,
-      message: 'Cliente registrado exitosamente',
-      data: result,
-    };
-  }
-
-  @Post('create-productor')
-  @Roles(Role.ADMIN)
-  @HttpCode(HttpStatus.CREATED)
-  @ApiBearerAuth('JWT-auth')
-  @ApiOperation({
-    summary: 'Crear usuario PRODUCTOR (Solo ADMIN)',
-    description: 'Solo el administrador puede crear usuarios productores.',
-  })
-  @ApiBody({ type: CreateProductorUserDto })
-  @ApiResponse({ status: 201, description: 'Productor creado exitosamente' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo administradores' })
-  @ApiResponse({ status: 409, description: 'El email ya está registrado' })
-  async createProductor(@Body() createProductorDto: CreateProductorUserDto) {
-    const result = await this.authService.createProductorUser(createProductorDto);
-    return {
-      success: true,
-      message: 'Productor creado exitosamente',
+      message: 'Usuario registrado exitosamente',
       data: result,
     };
   }

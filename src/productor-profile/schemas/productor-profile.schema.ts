@@ -32,7 +32,6 @@ export class ProductorProfile {
     type: {
       type: String,
       enum: ['Point'],
-      default: 'Point',
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
@@ -69,7 +68,7 @@ export const ProductorProfileSchema = SchemaFactory.createForClass(ProductorProf
 
 // Indexes para optimizar queries
 ProductorProfileSchema.index({ user: 1 }, { unique: true });
-ProductorProfileSchema.index({ ubicacion: '2dsphere' }); // Para queries geoespaciales
+ProductorProfileSchema.index({ ubicacion: '2dsphere' }, { sparse: true }); // Para queries geoespaciales (sparse = solo si existe)
 ProductorProfileSchema.index({ isActive: 1 });
 ProductorProfileSchema.index({ isVerified: 1 });
 ProductorProfileSchema.index({ categorias: 1 });

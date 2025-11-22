@@ -58,14 +58,19 @@ export class AuthService implements OnModuleInit {
 
     try {
       // 2. Crear Profile según el rol (Factory Pattern)
+      const userId = (newUser._id as any).toString();
+
       if (registerDto.role === Role.CLIENTE) {
-        await this.clienteProfileService.create(newUser._id.toString(), {
+        await this.clienteProfileService.create(userId, {
           nombre: registerDto.nombre,
           telefono: registerDto.telefono,
           direccion: registerDto.direccion,
         });
       } else if (registerDto.role === Role.PRODUCTOR) {
-        await this.productorProfileService.create(newUser._id.toString(), {
+        if (!registerDto.nombreNegocio) {
+          throw new ConflictException('nombreNegocio es requerido para PRODUCTOR');
+        }
+        await this.productorProfileService.create(userId, {
           nombreNegocio: registerDto.nombreNegocio,
           nombreContacto: registerDto.nombre,
           telefono: registerDto.telefono,
@@ -83,7 +88,7 @@ export class AuthService implements OnModuleInit {
       };
     } catch (error) {
       // Si falla la creación del profile, eliminar el user creado (rollback)
-      await this.userModel.findByIdAndDelete(newUser._id);
+      await this.userModel.findByIdAndDelete((newUser._id as any).toString());
       throw error;
     }
   }
