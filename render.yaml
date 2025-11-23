@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: saborlocal-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: NODE_OPTIONS
+        value: --max_old_space_size=460

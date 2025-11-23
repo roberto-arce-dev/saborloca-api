@@ -65,23 +65,24 @@
           "response": []
         },
         {
-          "name": "Get My User Info",
+          "name": "Get My Profile",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{token}}"
+                "value": "Bearer {{token}}",
+                "type": "text"
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/auth/me",
+              "raw": "{{baseUrl}}/auth/profile",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "auth",
-                "me"
+                "profile"
               ]
             },
             "description": "Obtener información del usuario autenticado (requiere token)"
@@ -89,31 +90,32 @@
           "response": []
         },
         {
-          "name": "Refresh Token",
+          "name": "Get All Users (Admin)",
           "request": {
-            "method": "POST",
+            "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{token}}"
+                "value": "Bearer {{token}}",
+                "type": "text"
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/auth/refresh",
+              "raw": "{{baseUrl}}/auth/users",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "auth",
-                "refresh"
+                "users"
               ]
             },
-            "description": "Renovar token JWT (requiere token válido)"
+            "description": "Listar todos los usuarios del sistema (solo ADMIN)"
           },
           "response": []
         }
       ],
-      "description": "Endpoints de autenticación (registro, login, info de usuario)"
+      "description": "Endpoints de autenticación (registro, login, perfil de usuario)"
     },
     {
       "name": "Upload Image",
