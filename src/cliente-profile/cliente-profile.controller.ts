@@ -26,7 +26,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/roles.enum';
 
 @ApiTags('Cliente Profile')
-@Controller('api/cliente-profile')
+@Controller('cliente-profile')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
 export class ClienteProfileController {

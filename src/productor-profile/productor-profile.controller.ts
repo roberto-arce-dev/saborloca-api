@@ -26,7 +26,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/roles.enum';
 
 @ApiTags('Productor Profile')
-@Controller('api/productor-profile')
+@Controller('productor-profile')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
 export class ProductorProfileController {

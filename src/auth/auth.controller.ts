@@ -7,7 +7,13 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -29,7 +35,8 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Registrar nuevo usuario',
-    description: 'Endpoint público para auto-registro. Se puede registrar como CLIENTE o PRODUCTOR.',
+    description:
+      'Endpoint público para auto-registro. Se puede registrar como CLIENTE o PRODUCTOR.',
   })
   @ApiBody({ type: RegisterDto })
   @ApiResponse({ status: 201, description: 'Usuario registrado exitosamente' })
@@ -77,7 +84,10 @@ export class AuthController {
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Listar todos los usuarios (solo ADMIN)' })
   @ApiResponse({ status: 200, description: 'Lista de usuarios' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo administradores' })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo administradores',
+  })
   async getAllUsers() {
     const users = await this.authService.getAllUsers();
     return {
