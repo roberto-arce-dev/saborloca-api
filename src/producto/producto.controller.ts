@@ -137,11 +137,32 @@ export class ProductoController {
     return { success: true, data };
   }
 
-  @Get('productor/:productorId')
+  @Get('productor/:id')
   @Public()
-  @ApiOperation({ summary: 'Productos por productor' })
-  async findByProductor(@Param('productorId') productorId: string) {
-    const data = await this.productoService.findByProductor(productorId);
+  @ApiOperation({ summary: 'Productos por ProductorProfile ID o User ID' })
+  @ApiParam({ name: 'id', description: 'ID del ProductorProfile o ID del User con rol PRODUCTOR' })
+  @ApiResponse({ status: 200, description: 'Lista de productos del productor' })
+  @ApiResponse({ status: 404, description: 'Productor no encontrado' })
+  async findByProductor(@Param('id') id: string) {
+    let productorProfileId: string;
+    
+    try {
+      // Primero intentar buscar directamente por ProductorProfile ID
+      const productos = await this.productoService.findByProductor(id);
+      if (productos.length > 0) {
+        return { success: true, data: productos, total: productos.length };
+      }
+      
+      // Si no hay productos, puede que sea un User ID, intentar buscar el ProductorProfile
+      const productorProfile = await this.productorProfileService.findByUserId(id);
+      productorProfileId = (productorProfile as any)._id.toString();
+      
+    } catch (error) {
+      // Si falla buscar por User ID, asumir que el ID original era ProductorProfile ID
+      productorProfileId = id;
+    }
+    
+    const data = await this.productoService.findByProductor(productorProfileId);
     return { success: true, data, total: data.length };
   }
 
