@@ -16,9 +16,17 @@ export class PedidoService {
   ) {}
 
   async create(createPedidoDto: CreatePedidoDto, userId: string): Promise<Pedido> {
-    // 1. Buscar el ClienteProfile del usuario autenticado
-    const clienteProfile = await this.clienteProfileService.findByUserId(userId);
-    const clienteId = (clienteProfile as any)._id.toString();
+    let clienteId: string;
+
+    // 1. Determinar el cliente
+    if (createPedidoDto.cliente) {
+      // Si se especificó un cliente (caso ADMIN), usarlo directamente
+      clienteId = createPedidoDto.cliente;
+    } else {
+      // Si no, buscar el ClienteProfile del usuario autenticado
+      const clienteProfile = await this.clienteProfileService.findByUserId(userId);
+      clienteId = (clienteProfile as any)._id.toString();
+    }
 
     // 2. Buscar cada producto y calcular precio
     const itemsConPrecio = await Promise.all(

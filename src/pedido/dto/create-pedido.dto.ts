@@ -22,6 +22,14 @@ export class PedidoItemDto {
 }
 
 export class CreatePedidoDto {
+  @ApiPropertyOptional({
+    example: '507f1f77bcf86cd799439011',
+    description: 'ID del ClienteProfile (opcional, solo para ADMIN. Si no se especifica, se usa el perfil del usuario autenticado)',
+  })
+  @IsOptional()
+  @IsString()
+  cliente?: string;
+
   @ApiProperty({
     type: [PedidoItemDto],
     description: 'Items del pedido',
