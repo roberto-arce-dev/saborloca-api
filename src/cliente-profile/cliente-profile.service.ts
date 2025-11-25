@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ClienteProfile, ClienteProfileDocument } from './schemas/cliente-profile.schema';
 import { CreateClienteProfileDto } from './dto/create-cliente-profile.dto';
 import { UpdateClienteProfileDto } from './dto/update-cliente-profile.dto';
@@ -25,7 +25,7 @@ export class ClienteProfileService {
   ): Promise<ClienteProfile> {
     // Verificar que no exista ya un perfil para este usuario
     const existingProfile = await this.clienteProfileModel
-      .findOne({ user: userId })
+      .findOne({ user: new Types.ObjectId(userId) })
       .exec();
 
     if (existingProfile) {
@@ -36,7 +36,7 @@ export class ClienteProfileService {
 
     const newProfile = new this.clienteProfileModel({
       ...createDto,
-      user: userId,
+      user: new Types.ObjectId(userId),
     });
 
     return newProfile.save();
@@ -73,7 +73,7 @@ export class ClienteProfileService {
    */
   async findByUserId(userId: string): Promise<ClienteProfile> {
     const profile = await this.clienteProfileModel
-      .findOne({ user: userId })
+      .findOne({ user: new Types.ObjectId(userId) })
       .populate('user', 'email role createdAt')
       .exec();
 

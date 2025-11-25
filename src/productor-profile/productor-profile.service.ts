@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ProductorProfile, ProductorProfileDocument } from './schemas/productor-profile.schema';
 import { CreateProductorProfileDto } from './dto/create-productor-profile.dto';
 import { UpdateProductorProfileDto } from './dto/update-productor-profile.dto';
@@ -17,11 +17,11 @@ export class ProductorProfileService {
   ) {}
 
   async create(userId: string, createDto: CreateProductorProfileDto): Promise<ProductorProfile> {
-    const existingProfile = await this.productorProfileModel.findOne({ user: userId }).exec();
+    const existingProfile = await this.productorProfileModel.findOne({ user: new Types.ObjectId(userId) }).exec();
     if (existingProfile) {
       throw new ConflictException('Ya existe un perfil de productor para este usuario');
     }
-    const newProfile = new this.productorProfileModel({ ...createDto, user: userId });
+    const newProfile = new this.productorProfileModel({ ...createDto, user: new Types.ObjectId(userId) });
     return newProfile.save();
   }
 
@@ -39,7 +39,7 @@ export class ProductorProfileService {
   }
 
   async findByUserId(userId: string): Promise<ProductorProfile> {
-    const profile = await this.productorProfileModel.findOne({ user: userId }).populate('user', 'email role createdAt').exec();
+    const profile = await this.productorProfileModel.findOne({ user: new Types.ObjectId(userId) }).populate('user', 'email role createdAt').exec();
     if (!profile) {
       throw new NotFoundException(`Perfil de productor para usuario ${userId} no encontrado`);
     }
