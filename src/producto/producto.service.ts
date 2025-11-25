@@ -12,7 +12,6 @@ export class ProductoService {
   ) {}
 
   async create(createProductoDto: CreateProductoDto, productorId: string): Promise<Producto> {
-    console.log('Service creating product with Productor ID:', productorId);
     const nuevoProducto = await this.productoModel.create({
       ...createProductoDto,
       productor: productorId,

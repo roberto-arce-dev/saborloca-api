@@ -48,9 +48,7 @@ export class ProductoController {
   @ApiResponse({ status: 403, description: 'Sin permisos' })
   async create(@Body() createProductoDto: CreateProductoDto, @Req() req: any) {
     const userId = req.user.userId;
-    console.log('Creating product for User ID:', userId);
     const productorProfile = await this.productorProfileService.findByUserId(userId);
-    console.log('Found ProductorProfile ID:', (productorProfile as any)._id);
     
     const data = await this.productoService.create(createProductoDto, (productorProfile as any)._id);
     return {
@@ -134,6 +132,7 @@ export class ProductoController {
   }
 
   @Get('productor/:productorId')
+  @Public()
   @ApiOperation({ summary: 'Productos por productor' })
   async findByProductor(@Param('productorId') productorId: string) {
     const data = await this.productoService.findByProductor(productorId);
