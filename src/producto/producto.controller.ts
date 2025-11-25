@@ -48,13 +48,8 @@ export class ProductoController {
   @ApiResponse({ status: 403, description: 'Sin permisos' })
   async create(@Body() createProductoDto: CreateProductoDto, @Req() req: any) {
     const userId = req.user.userId;
-    console.log('🔍 JWT userId (User ID):', userId);
-    
     const productorProfile = await this.productorProfileService.findByUserId(userId);
     const productorProfileId = (productorProfile as any)._id.toString();
-    
-    console.log('🔍 ProductorProfile._id:', productorProfileId);
-    console.log('🔍 ProductorProfile.user:', (productorProfile as any).user);
     
     const data = await this.productoService.create(createProductoDto, productorProfileId);
     return {

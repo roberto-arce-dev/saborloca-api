@@ -34,8 +34,9 @@ export class PedidoController {
   @ApiResponse({ status: 201, description: 'Pedido creado exitosamente' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
-  async create(@Body() createPedidoDto: CreatePedidoDto) {
-    const data = await this.pedidoService.create(createPedidoDto);
+  async create(@Body() createPedidoDto: CreatePedidoDto, @Req() req: any) {
+    const userId = req.user.userId;
+    const data = await this.pedidoService.create(createPedidoDto, userId);
     return {
       success: true,
       message: 'Pedido creado exitosamente',
