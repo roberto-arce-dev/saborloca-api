@@ -25,6 +25,11 @@ export class ProductoService {
     return productos;
   }
 
+  async findByProductor(productorId: string): Promise<Producto[]> {
+    return this.productoModel.find({ productor: productorId })
+      .populate('productor', 'nombre email telefono ubicacion');
+  }
+
   async findOne(id: string | number): Promise<Producto> {
     const producto = await this.productoModel.findById(id)
       .populate('productor', 'nombre email telefono ubicacion');
