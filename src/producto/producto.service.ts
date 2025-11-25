@@ -11,8 +11,11 @@ export class ProductoService {
     @InjectModel(Producto.name) private productoModel: Model<ProductoDocument>,
   ) {}
 
-  async create(createProductoDto: CreateProductoDto): Promise<Producto> {
-    const nuevoProducto = await this.productoModel.create(createProductoDto);
+  async create(createProductoDto: CreateProductoDto, productorId: string): Promise<Producto> {
+    const nuevoProducto = await this.productoModel.create({
+      ...createProductoDto,
+      productor: productorId,
+    });
     return nuevoProducto;
   }
 

@@ -24,6 +24,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Public } from '../auth/decorators/public.decorator';
 import { Role } from '../auth/enums/roles.enum';
 
+import { ProductorProfileService } from '../productor-profile/productor-profile.service';
+
 @ApiTags('Producto')
 @ApiBearerAuth('JWT-auth')
 @Controller('producto')
@@ -32,6 +34,7 @@ export class ProductoController {
   constructor(
     private readonly productoService: ProductoService,
     private readonly uploadService: UploadService,
+    private readonly productorProfileService: ProductorProfileService,
   ) {}
 
   @Post()
@@ -43,8 +46,11 @@ export class ProductoController {
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 403, description: 'Sin permisos' })
-  async create(@Body() createProductoDto: CreateProductoDto) {
-    const data = await this.productoService.create(createProductoDto);
+  async create(@Body() createProductoDto: CreateProductoDto, @Req() req: any) {
+    const userId = req.user.userId;
+    const productorProfile = await this.productorProfileService.findByUserId(userId);
+    
+    const data = await this.productoService.create(createProductoDto, (productorProfile as any)._id);
     return {
       success: true,
       message: 'Producto creado exitosamente',
@@ -123,6 +129,13 @@ export class ProductoController {
   async findOne(@Param('id') id: string) {
     const data = await this.productoService.findOne(id);
     return { success: true, data };
+  }
+
+  @Get('productor/:productorId')
+  @ApiOperation({ summary: 'Productos por productor' })
+  async findByProductor(@Param('productorId') productorId: string) {
+    const data = await this.productoService.findByProductor(productorId);
+    return { success: true, data, total: data.length };
   }
 
   @Patch(':id')

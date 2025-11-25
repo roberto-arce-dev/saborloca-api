@@ -587,6 +587,102 @@
           }
         }
       ]
+    },
+    {
+      "name": "Producto",
+      "item": [
+        {
+          "name": "Productos por Productor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/producto/productor/{{productorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "productor",
+                "{{productorId}}"
+              ]
+            },
+            "description": "Catálogo del productor"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints específicos de Producto"
+    },
+    {
+      "name": "Pedido",
+      "item": [
+        {
+          "name": "Mis Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/cliente/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "cliente",
+                "{{clienteId}}"
+              ]
+            },
+            "description": "Historial de pedidos"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints específicos de Pedido"
+    },
+    {
+      "name": "Entrega",
+      "item": [
+        {
+          "name": "Estado de Entrega",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/entrega/pedido/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entrega",
+                "pedido",
+                "{{pedidoId}}"
+              ]
+            },
+            "description": "Seguimiento de entrega"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints específicos de Entrega"
     }
   ],
   "variable": [

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsNumber, Min, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateProductoDto {
@@ -32,5 +32,54 @@ export class CreateProductoDto {
   })
   @IsOptional()
   @IsString()
+  @ApiPropertyOptional({
+    example: 'https://example.com/thumbnail.jpg',
+    description: 'URL del thumbnail',
+  })
+  @IsOptional()
+  @IsString()
   imagenThumbnail?: string;
+
+  @ApiProperty({
+    example: 1500,
+    description: 'Precio del producto',
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  precio: number;
+
+  @ApiPropertyOptional({
+    example: 100,
+    description: 'Stock disponible',
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  stock?: number;
+
+  @ApiPropertyOptional({
+    example: 'unidad',
+    description: 'Unidad de medida (kg, unidad, litro, docena)',
+    enum: ['kg', 'unidad', 'litro', 'docena'],
+  })
+  @IsOptional()
+  @IsString()
+  unidad?: string;
+
+  @ApiPropertyOptional({
+    example: 'frutas',
+    description: 'Categoría del producto',
+  })
+  @IsOptional()
+  @IsString()
+  categoria?: string;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Si el producto está disponible',
+  })
+  @IsOptional()
+  @IsBoolean()
+  disponible?: boolean;
 }
