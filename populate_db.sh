@@ -81,7 +81,8 @@ create_product() {
     local descripcion=$6
     local stock=$((10 + RANDOM % 50))
 
-    curl -s -o /dev/null -X POST "$API_URL/producto" \
+    echo "  Creating $nombre..."
+    RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$API_URL/producto" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $token" \
         -d "{
@@ -92,9 +93,16 @@ create_product() {
             \"descripcion\": \"$descripcion\",
             \"stock\": $stock,
             \"disponible\": true
-        }"
-    
-    echo "  - Producto creado: $nombre"
+        }")
+
+    HTTP_BODY=$(echo "$RESPONSE" | head -n1)
+    HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
+
+    if [ "$HTTP_STATUS" -eq 201 ]; then
+        echo -e "${GREEN}  ✅ Producto creado: $nombre${NC}"
+    else
+        echo -e "${RED}  ❌ Error ($HTTP_STATUS): $HTTP_BODY${NC}"
+    fi
 }
 
 # Ejecutar para 3 productores
