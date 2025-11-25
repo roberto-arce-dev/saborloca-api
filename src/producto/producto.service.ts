@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { Producto, ProductoDocument } from './schemas/producto.schema';
@@ -26,7 +26,7 @@ export class ProductoService {
   }
 
   async findByProductor(productorId: string): Promise<Producto[]> {
-    return this.productoModel.find({ productor: productorId })
+    return this.productoModel.find({ productor: new Types.ObjectId(productorId) })
       .populate('productor', 'nombre email telefono ubicacion');
   }
 
