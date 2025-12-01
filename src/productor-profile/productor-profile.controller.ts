@@ -23,6 +23,7 @@ import { UpdateProductorProfileDto } from './dto/update-productor-profile.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { Role } from '../auth/enums/roles.enum';
 
 @ApiTags('Productor Profile')
@@ -42,6 +43,7 @@ export class ProductorProfileController {
   }
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Obtener todos los perfiles de productores' })
   @ApiQuery({ name: 'verified', required: false, type: Boolean, description: 'Filtrar solo verificados' })
   @ApiResponse({ status: 200, description: 'Lista de perfiles de productores' })
@@ -59,6 +61,7 @@ export class ProductorProfileController {
   }
 
   @Get('nearby')
+  @Public()
   @ApiOperation({ summary: 'Buscar productores cercanos a una ubicación' })
   @ApiQuery({ name: 'longitude', required: true, type: Number })
   @ApiQuery({ name: 'latitude', required: true, type: Number })
@@ -81,6 +84,7 @@ export class ProductorProfileController {
   }
 
   @Get('categoria/:categoria')
+  @Public()
   @ApiOperation({ summary: 'Buscar productores por categoría' })
   @ApiResponse({ status: 200, description: 'Lista de productores en la categoría' })
   findByCategoria(@Param('categoria') categoria: string) {
@@ -88,6 +92,7 @@ export class ProductorProfileController {
   }
 
   @Get(':id')
+  @Public()
   @ApiOperation({ summary: 'Obtener perfil de productor por ID' })
   @ApiResponse({ status: 200, description: 'Perfil encontrado' })
   @ApiResponse({ status: 404, description: 'Perfil no encontrado' })

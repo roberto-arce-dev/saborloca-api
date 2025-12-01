@@ -12,6 +12,7 @@ import { ClienteProfileModule } from './cliente-profile/cliente-profile.module';
 import { ProductorProfileModule } from './productor-profile/productor-profile.module';
 import { ProductoModule } from './producto/producto.module';
 import { PedidoModule } from './pedido/pedido.module';
+import { EntregaModule } from './entrega/entrega.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { PedidoModule } from './pedido/pedido.module';
     UploadModule,
     ProductoModule,
     PedidoModule,
+    EntregaModule,
   ],
   controllers: [AppController],
   providers: [

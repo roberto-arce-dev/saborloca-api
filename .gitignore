@@ -5,3 +5,6 @@
 *.log
 
 /public
+
+#macos
+.DS_Store
