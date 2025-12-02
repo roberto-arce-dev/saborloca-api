@@ -1,5 +1,16 @@
-import { IsNotEmpty, IsOptional, IsString, IsNumber, Min, IsBoolean } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsNumber,
+  Min,
+  IsBoolean,
+  IsIn,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+
+const UNIDADES = ['kg', 'unidad', 'litro', 'docena'] as const;
 
 export class CreateProductoDto {
   @ApiProperty({
@@ -32,12 +43,6 @@ export class CreateProductoDto {
   })
   @IsOptional()
   @IsString()
-  @ApiPropertyOptional({
-    example: 'https://example.com/thumbnail.jpg',
-    description: 'URL del thumbnail',
-  })
-  @IsOptional()
-  @IsString()
   imagenThumbnail?: string;
 
   @ApiProperty({
@@ -47,6 +52,7 @@ export class CreateProductoDto {
   @IsNotEmpty()
   @IsNumber()
   @Min(0)
+  @Type(() => Number)
   precio: number;
 
   @ApiPropertyOptional({
@@ -56,15 +62,17 @@ export class CreateProductoDto {
   @IsOptional()
   @IsNumber()
   @Min(0)
+  @Type(() => Number)
   stock?: number;
 
   @ApiPropertyOptional({
     example: 'unidad',
     description: 'Unidad de medida (kg, unidad, litro, docena)',
-    enum: ['kg', 'unidad', 'litro', 'docena'],
+    enum: UNIDADES,
   })
   @IsOptional()
   @IsString()
+  @IsIn(UNIDADES)
   unidad?: string;
 
   @ApiPropertyOptional({
@@ -81,5 +89,6 @@ export class CreateProductoDto {
   })
   @IsOptional()
   @IsBoolean()
+  @Type(() => Boolean)
   disponible?: boolean;
 }

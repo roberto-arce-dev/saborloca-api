@@ -8,12 +8,16 @@ import {
   ValidateNested,
   ArrayMinSize,
   ArrayMaxSize,
+  IsNotEmpty,
+  IsIn,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class UbicacionDto {
   @ApiProperty({ example: 'Point', description: 'Tipo de geometría GeoJSON' })
   @IsString()
+  @IsNotEmpty()
+  @IsIn(['Point'])
   type: string;
 
   @ApiProperty({
@@ -21,9 +25,10 @@ class UbicacionDto {
     description: 'Coordenadas [longitud, latitud]',
   })
   @IsArray()
-  @IsNumber({}, { each: true })
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
   coordinates: number[];
 }
 
@@ -32,6 +37,7 @@ export class CreateProductorProfileDto {
     example: 'Frutas del Valle',
     description: 'Nombre del negocio o emprendimiento',
   })
+  @IsNotEmpty()
   @IsString()
   nombreNegocio: string;
 
@@ -39,6 +45,7 @@ export class CreateProductorProfileDto {
     example: 'Juan Pérez',
     description: 'Nombre de la persona de contacto',
   })
+  @IsNotEmpty()
   @IsString()
   nombreContacto: string;
 
@@ -99,6 +106,7 @@ export class CreateProductorProfileDto {
   })
   @IsOptional()
   @IsBoolean()
+  @Type(() => Boolean)
   isActive?: boolean;
 
   @ApiPropertyOptional({
@@ -107,5 +115,6 @@ export class CreateProductorProfileDto {
   })
   @IsOptional()
   @IsBoolean()
+  @Type(() => Boolean)
   isVerified?: boolean;
 }

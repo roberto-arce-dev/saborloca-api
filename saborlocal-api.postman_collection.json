@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "SaborLocal API",
-    "description": "Colección completa de Postman para SaborLocal API con Auth y Profiles",
+    "description": "Colección actualizada de Postman para SaborLocal API con DTOs validados.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -20,7 +20,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"CLIENTE\",\n  \"nombre\": \"Juan P\\u00e9rez\"\n}"
+              "raw": "{\n  \"email\": \"cliente@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"CLIENTE\",\n  \"nombre\": \"Cliente Demo\",\n  \"telefono\": \"+51 900000000\",\n  \"direccion\": \"Av. Principal 123, Lima\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
@@ -32,7 +32,7 @@
                 "register"
               ]
             },
-            "description": "Registrar nuevo usuario. Roles disponibles: CLIENTE, PRODUCTOR"
+            "description": "Registrar usuario (CLIENTE o PRODUCTOR). Para PRODUCTOR envía también nombreNegocio y descripcion."
           },
           "response": []
         },
@@ -48,7 +48,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"cliente@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
@@ -65,7 +65,7 @@
           "response": []
         },
         {
-          "name": "Get My Profile",
+          "name": "Profile",
           "request": {
             "method": "GET",
             "header": [
@@ -90,7 +90,7 @@
           "response": []
         },
         {
-          "name": "Get All Users (Admin)",
+          "name": "List Users (Admin)",
           "request": {
             "method": "GET",
             "header": [
@@ -110,45 +110,18 @@
                 "users"
               ]
             },
-            "description": "Listar todos los usuarios del sistema (solo ADMIN)"
+            "description": "Listado de usuarios (requiere rol ADMIN)"
           },
           "response": []
         }
-      ],
-      "description": "Endpoints de autenticación (registro, login, perfil de usuario)"
+      ]
     },
     {
-      "name": "Upload Image",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "file",
-              "type": "file",
-              "src": [],
-              "description": "Imagen a subir (JPG, PNG, etc.) - Máximo 5MB"
-            }
-          ]
-        },
-        "url": {
-          "raw": "{{baseUrl}}/upload/image",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "upload",
-            "image"
-          ]
-        },
-        "description": "Sube una imagen al servidor y genera un thumbnail automáticamente"
-      },
-      "response": [
+      "name": "Upload",
+      "item": [
         {
-          "name": "Upload exitoso",
-          "originalRequest": {
+          "name": "Upload Image",
+          "request": {
             "method": "POST",
             "header": [],
             "body": {
@@ -157,7 +130,7 @@
                 {
                   "key": "file",
                   "type": "file",
-                  "src": []
+                  "src": ""
                 }
               ]
             },
@@ -170,26 +143,18 @@
                 "upload",
                 "image"
               ]
-            }
+            },
+            "description": "Sube una imagen y genera thumbnail automáticamente."
           },
-          "status": "Created",
-          "code": 201,
-          "_postman_previewlanguage": "json",
-          "header": [
-            {
-              "key": "Content-Type",
-              "value": "application/json"
-            }
-          ],
-          "body": "{\n  \"message\": \"Imagen subida exitosamente\",\n  \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n  \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n}"
+          "response": []
         }
       ]
     },
     {
-      "name": "Upload por Entidad",
+      "name": "ClienteProfile",
       "item": [
         {
-          "name": "Upload Producto Image",
+          "name": "Crear perfil",
           "request": {
             "method": "POST",
             "header": [
@@ -197,239 +162,7 @@
                 "key": "Authorization",
                 "value": "Bearer {{token}}",
                 "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "file",
-                  "type": "file",
-                  "src": [],
-                  "description": "Imagen para Producto (JPG, PNG, etc.) - Máximo 5MB"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/producto/{{id}}/upload-image",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "producto",
-                "{{id}}",
-                "upload-image"
-              ]
-            },
-            "description": "Sube una imagen y la asocia al Producto especificado. Requiere autenticación."
-          },
-          "response": [
-            {
-              "name": "Upload exitoso",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "file",
-                      "type": "file",
-                      "src": []
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/producto/507f1f77bcf86cd799439011/upload-image",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "producto",
-                    "507f1f77bcf86cd799439011",
-                    "upload-image"
-                  ]
-                }
               },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"producto\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
-            }
-          ]
-        },
-        {
-          "name": "Upload Pedido Image",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "file",
-                  "type": "file",
-                  "src": [],
-                  "description": "Imagen para Pedido (JPG, PNG, etc.) - Máximo 5MB"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/pedido/{{id}}/upload-image",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "pedido",
-                "{{id}}",
-                "upload-image"
-              ]
-            },
-            "description": "Sube una imagen y la asocia al Pedido especificado. Requiere autenticación."
-          },
-          "response": [
-            {
-              "name": "Upload exitoso",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "file",
-                      "type": "file",
-                      "src": []
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/pedido/507f1f77bcf86cd799439011/upload-image",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "pedido",
-                    "507f1f77bcf86cd799439011",
-                    "upload-image"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Imagen subida y asociada exitosamente\",\n  \"data\": {\n    \"pedido\": {\n      \"_id\": \"507f1f77bcf86cd799439011\",\n      \"imagen\": \"uploads/1700000000000-imagen.jpg\",\n      \"imagenThumbnail\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    },\n    \"upload\": {\n      \"url\": \"uploads/1700000000000-imagen.jpg\",\n      \"thumbnailUrl\": \"uploads/thumbnails/thumb-1700000000000-imagen.jpg\"\n    }\n  }\n}"
-            }
-          ]
-        }
-      ],
-      "description": "Endpoints para subir y asociar imágenes a entidades específicas: Producto, Pedido"
-    },
-    {
-      "name": "Servir Imágenes",
-      "item": [
-        {
-          "name": "Get Image",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3008/uploads/{{filename}}",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3008",
-              "path": [
-                "uploads",
-                "{{filename}}"
-              ]
-            },
-            "description": "Obtiene una imagen subida previamente"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Thumbnail",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3008/uploads/thumbnails/{{filename}}",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3008",
-              "path": [
-                "uploads",
-                "thumbnails",
-                "{{filename}}"
-              ]
-            },
-            "description": "Obtiene un thumbnail generado automáticamente"
-          },
-          "response": []
-        }
-      ],
-      "description": "Endpoints para servir imágenes y thumbnails"
-    },
-    {
-      "name": "ClienteProfile (Profiles)",
-      "item": [
-        {
-          "name": "Get My Profile",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/cliente-profile/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "cliente-profile",
-                "me"
-              ]
-            },
-            "description": "Obtener mi ClienteProfile (requiere rol CLIENTE)"
-          }
-        },
-        {
-          "name": "Update My Profile",
-          "request": {
-            "method": "PUT",
-            "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -437,26 +170,8 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Valor de nombre\",\n  \"telefono\": \"+51 900000000\",\n  \"direccion\": \"Valor de direccion\",\n  \"ubicacion\": \"Valor de ubicacion\",\n  \"preferencias\": [\n    \"valor1\",\n    \"valor2\"\n  ]\n}"
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"telefono\": \"+51 987654321\",\n  \"direccion\": \"Av. Principal 123, Lima\",\n  \"ubicacion\": {\n    \"type\": \"Point\",\n    \"coordinates\": [\n      -77.0428,\n      -12.0464\n    ]\n  },\n  \"preferencias\": [\n    \"organico\",\n    \"vegano\"\n  ],\n  \"isActive\": true\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/cliente-profile/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "cliente-profile",
-                "me"
-              ]
-            },
-            "description": "Actualizar mi ClienteProfile (requiere rol CLIENTE)"
-          }
-        },
-        {
-          "name": "List All Profiles (Admin)",
-          "request": {
-            "method": "GET",
-            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cliente-profile",
               "host": [
@@ -466,62 +181,45 @@
                 "cliente-profile"
               ]
             },
-            "description": "Listar todos los ClienteProfile (requiere rol ADMIN)"
-          }
+            "description": "Crear perfil de cliente (rol CLIENTE o ADMIN)"
+          },
+          "response": []
         },
         {
-          "name": "Get Profile by UserId (Admin)",
+          "name": "Mi perfil",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/cliente-profile/:userId",
+              "raw": "{{baseUrl}}/cliente-profile/me",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "cliente-profile",
-                ":userId"
-              ],
-              "variable": [
-                {
-                  "key": "userId",
-                  "value": "",
-                  "description": "ID del usuario"
-                }
-              ]
-            },
-            "description": "Obtener ClienteProfile por userId (requiere rol ADMIN)"
-          }
-        }
-      ]
-    },
-    {
-      "name": "ProductorProfile (Profiles)",
-      "item": [
-        {
-          "name": "Get My Profile",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/productor-profile/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "productor-profile",
                 "me"
               ]
             },
-            "description": "Obtener mi ProductorProfile (requiere rol PRODUCTOR)"
-          }
+            "description": "Obtener perfil del usuario autenticado (CLIENTE)"
+          },
+          "response": []
         },
         {
-          "name": "Update My Profile",
+          "name": "Actualizar perfil",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -529,26 +227,159 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombreNegocio\": \"Valor de nombreNegocio\",\n  \"nombreContacto\": \"Valor de nombreContacto\",\n  \"telefono\": \"+51 900000000\",\n  \"direccion\": \"Valor de direccion\",\n  \"ubicacion\": \"Valor de ubicacion\",\n  \"descripcion\": \"Valor de descripcion\",\n  \"certificaciones\": [\n    \"valor1\",\n    \"valor2\"\n  ],\n  \"categorias\": [\n    \"valor1\",\n    \"valor2\"\n  ],\n  \"isVerified\": true\n}"
+              "raw": "{\n  \"telefono\": \"+51 900000000\",\n  \"preferencias\": [\n    \"sin-gluten\"\n  ]\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/productor-profile/me",
+              "raw": "{{baseUrl}}/cliente-profile/{{clienteProfileId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "productor-profile",
-                "me"
+                "cliente-profile",
+                "{{clienteProfileId}}"
               ]
             },
-            "description": "Actualizar mi ProductorProfile (requiere rol PRODUCTOR)"
-          }
+            "description": "Actualizar perfil de cliente por ID (CLIENTE o ADMIN)"
+          },
+          "response": []
         },
         {
-          "name": "List All Profiles (Admin)",
+          "name": "Listar perfiles (Admin)",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cliente-profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cliente-profile"
+              ]
+            },
+            "description": "Listar todos los perfiles de clientes (ADMIN)"
+          },
+          "response": []
+        },
+        {
+          "name": "Clientes cercanos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cliente-profile/nearby?longitude=-77.0428&latitude=-12.0464&maxDistance=10000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cliente-profile",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "longitude",
+                  "value": "-77.0428"
+                },
+                {
+                  "key": "latitude",
+                  "value": "-12.0464"
+                },
+                {
+                  "key": "maxDistance",
+                  "value": "10000"
+                }
+              ]
+            },
+            "description": "Buscar clientes cercanos (PRODUCTOR o ADMIN)"
+          },
+          "response": []
+        },
+        {
+          "name": "Perfil por ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cliente-profile/{{clienteProfileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cliente-profile",
+                "{{clienteProfileId}}"
+              ]
+            },
+            "description": "Obtener perfil de cliente por ID (ADMIN)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar perfil (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cliente-profile/{{clienteProfileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cliente-profile",
+                "{{clienteProfileId}}"
+              ]
+            },
+            "description": "Eliminar perfil de cliente (soft delete)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ProductorProfile",
+      "item": [
+        {
+          "name": "Crear perfil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreNegocio\": \"Frutas del Valle\",\n  \"nombreContacto\": \"Juan Pérez\",\n  \"telefono\": \"+51 987654321\",\n  \"direccion\": \"Fundo La Esperanza\",\n  \"ubicacion\": {\n    \"type\": \"Point\",\n    \"coordinates\": [\n      -77.0428,\n      -12.0464\n    ]\n  },\n  \"descripcion\": \"Productor de frutas orgánicas\",\n  \"certificaciones\": [\n    \"organico\"\n  ],\n  \"categorias\": [\n    \"frutas\",\n    \"verduras\"\n  ],\n  \"isActive\": true,\n  \"isVerified\": false\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/productor-profile",
               "host": [
@@ -558,33 +389,218 @@
                 "productor-profile"
               ]
             },
-            "description": "Listar todos los ProductorProfile (requiere rol ADMIN)"
-          }
+            "description": "Crear perfil de productor (PRODUCTOR o ADMIN)"
+          },
+          "response": []
         },
         {
-          "name": "Get Profile by UserId (Admin)",
+          "name": "Mi perfil",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/productor-profile/:userId",
+              "raw": "{{baseUrl}}/productor-profile/me",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "productor-profile",
-                ":userId"
+                "me"
+              ]
+            },
+            "description": "Obtener perfil del productor autenticado"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar perfil",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Actualización de descripción\",\n  \"categorias\": [\n    \"granos\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile/{{productorProfileId}}",
+              "host": [
+                "{{baseUrl}}"
               ],
-              "variable": [
+              "path": [
+                "productor-profile",
+                "{{productorProfileId}}"
+              ]
+            },
+            "description": "Actualizar perfil de productor (PRODUCTOR o ADMIN)"
+          },
+          "response": []
+        },
+        {
+          "name": "Verificar productor (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile/{{productorProfileId}}/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "productor-profile",
+                "{{productorProfileId}}",
+                "verify"
+              ]
+            },
+            "description": "Marca un productor como verificado (ADMIN)"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar perfiles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile?verified=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "productor-profile"
+              ],
+              "query": [
                 {
-                  "key": "userId",
-                  "value": "",
-                  "description": "ID del usuario"
+                  "key": "verified",
+                  "value": "true"
                 }
               ]
             },
-            "description": "Obtener ProductorProfile por userId (requiere rol ADMIN)"
-          }
+            "description": "Listar productores (público). Usa verified=true para solo verificados."
+          },
+          "response": []
+        },
+        {
+          "name": "Productores cercanos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile/nearby?longitude=-77.0428&latitude=-12.0464&maxDistance=10000&categorias=frutas,verduras",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "productor-profile",
+                "nearby"
+              ],
+              "query": [
+                {
+                  "key": "longitude",
+                  "value": "-77.0428"
+                },
+                {
+                  "key": "latitude",
+                  "value": "-12.0464"
+                },
+                {
+                  "key": "maxDistance",
+                  "value": "10000"
+                },
+                {
+                  "key": "categorias",
+                  "value": "frutas,verduras"
+                }
+              ]
+            },
+            "description": "Buscar productores cercanos (público)"
+          },
+          "response": []
+        },
+        {
+          "name": "Por categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile/categoria/frutas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "productor-profile",
+                "categoria",
+                "frutas"
+              ]
+            },
+            "description": "Listar productores por categoría (público)"
+          },
+          "response": []
+        },
+        {
+          "name": "Perfil por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile/{{productorProfileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "productor-profile",
+                "{{productorProfileId}}"
+              ]
+            },
+            "description": "Obtener perfil de productor por ID (público)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar perfil (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/productor-profile/{{productorProfileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "productor-profile",
+                "{{productorProfileId}}"
+              ]
+            },
+            "description": "Eliminar perfil de productor (soft delete, ADMIN)"
+          },
+          "response": []
         }
       ]
     },
@@ -592,39 +608,227 @@
       "name": "Producto",
       "item": [
         {
-          "name": "Productos por Productor",
+          "name": "Crear producto",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [
               {
                 "key": "Authorization",
                 "value": "Bearer {{token}}",
                 "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Manzanas Fuji\",\n  \"descripcion\": \"Manzanas orgánicas seleccionadas\",\n  \"imagen\": \"https://example.com/imagen.jpg\",\n  \"imagenThumbnail\": \"https://example.com/thumb.jpg\",\n  \"precio\": 1500,\n  \"stock\": 100,\n  \"unidad\": \"kg\",\n  \"categoria\": \"frutas\",\n  \"disponible\": true\n}"
+            },
             "url": {
-              "raw": "{{baseUrl}}/producto/productor/{{productorId}}",
+              "raw": "{{baseUrl}}/producto",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto"
+              ]
+            },
+            "description": "Crear producto (ADMIN o PRODUCTOR)"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/producto",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto"
+              ]
+            },
+            "description": "Listado público de productos"
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle producto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/producto/{{productoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "{{productoId}}"
+              ]
+            },
+            "description": "Obtener producto por ID (público)"
+          },
+          "response": []
+        },
+        {
+          "name": "Productos por productor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/producto/productor/{{productorProfileId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "producto",
                 "productor",
-                "{{productorId}}"
+                "{{productorProfileId}}"
               ]
             },
-            "description": "Catálogo del productor"
+            "description": "Catálogo por ProductorProfile o por User ID de productor (público)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar producto",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"precio\": 1800,\n  \"disponible\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/producto/{{productoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "{{productoId}}"
+              ]
+            },
+            "description": "Actualizar producto (ADMIN o PRODUCTOR)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/producto/{{productoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "{{productoId}}"
+              ]
+            },
+            "description": "Eliminar producto (ADMIN o PRODUCTOR)"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload imagen producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/producto/{{productoId}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "producto",
+                "{{productoId}}",
+                "upload-image"
+              ]
+            },
+            "description": "Subir imagen y thumbnail para un producto"
           },
           "response": []
         }
-      ],
-      "description": "Endpoints específicos de Producto"
+      ]
     },
     {
       "name": "Pedido",
       "item": [
         {
-          "name": "Mis Pedidos",
+          "name": "Crear pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente\": \"{{clienteProfileId}}\",\n  \"items\": [\n    {\n      \"producto\": \"{{productoId}}\",\n      \"cantidad\": 2\n    }\n  ],\n  \"direccionEntrega\": \"Calle 123, Depto 4B\",\n  \"notasEntrega\": \"Tocar el timbre\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedido",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido"
+              ]
+            },
+            "description": "Crear pedido. cliente es opcional y solo para ADMIN."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pedidos",
           "request": {
             "method": "GET",
             "header": [
@@ -635,28 +839,176 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/pedido/cliente/{{clienteId}}",
+              "raw": "{{baseUrl}}/pedido",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido"
+              ]
+            },
+            "description": "Listado de pedidos"
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle pedido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/{{pedidoId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "pedido",
-                "cliente",
-                "{{clienteId}}"
+                "{{pedidoId}}"
               ]
             },
-            "description": "Historial de pedidos"
+            "description": "Obtener pedido por ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar pedido",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"confirmado\",\n  \"notasEntrega\": \"Entregar en portería\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedido/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "{{pedidoId}}"
+              ]
+            },
+            "description": "Actualizar pedido (estado o datos opcionales)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "{{pedidoId}}"
+              ]
+            },
+            "description": "Eliminar pedido"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload imagen pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pedido/{{pedidoId}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "{{pedidoId}}",
+                "upload-image"
+              ]
+            },
+            "description": "Subir imagen asociada al pedido"
           },
           "response": []
         }
-      ],
-      "description": "Endpoints específicos de Pedido"
+      ]
     },
     {
       "name": "Entrega",
       "item": [
         {
-          "name": "Estado de Entrega",
+          "name": "Crear entrega",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pedido\": \"{{pedidoId}}\",\n  \"direccion\": \"Av. Principal 123, Lima\",\n  \"fechaEntrega\": \"2024-12-01T15:00:00.000Z\",\n  \"estado\": \"programada\",\n  \"repartidor\": \"Juan Pérez\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entrega",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entrega"
+              ]
+            },
+            "description": "Crear registro de entrega"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar entregas",
           "request": {
             "method": "GET",
             "header": [
@@ -667,28 +1019,174 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/entrega/pedido/{{pedidoId}}",
+              "raw": "{{baseUrl}}/entrega",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entrega"
+              ]
+            },
+            "description": "Listado de entregas"
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle entrega",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/entrega/{{entregaId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "entrega",
-                "pedido",
-                "{{pedidoId}}"
+                "{{entregaId}}"
               ]
             },
-            "description": "Seguimiento de entrega"
+            "description": "Obtener entrega por ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar entrega",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"en-ruta\",\n  \"repartidor\": \"Carlos Rojas\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entrega/{{entregaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entrega",
+                "{{entregaId}}"
+              ]
+            },
+            "description": "Actualizar datos o estado de una entrega"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar entrega",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/entrega/{{entregaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entrega",
+                "{{entregaId}}"
+              ]
+            },
+            "description": "Eliminar entrega"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload imagen entrega",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entrega/{{entregaId}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entrega",
+                "{{entregaId}}",
+                "upload-image"
+              ]
+            },
+            "description": "Subir imagen asociada a una entrega"
           },
           "response": []
         }
-      ],
-      "description": "Endpoints específicos de Entrega"
+      ]
     }
   ],
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3008/api",
+      "value": "http://localhost:3009/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "clienteProfileId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productorProfileId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pedidoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "entregaId",
+      "value": "",
       "type": "string"
     }
   ]

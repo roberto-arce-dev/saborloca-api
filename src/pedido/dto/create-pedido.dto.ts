@@ -1,4 +1,15 @@
-import { IsNotEmpty, IsArray, IsNumber, Min, IsOptional, IsString, IsEnum, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsArray,
+  IsNumber,
+  Min,
+  IsOptional,
+  IsString,
+  ValidateNested,
+  IsMongoId,
+  ArrayMinSize,
+  IsInt,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -9,6 +20,7 @@ export class PedidoItemDto {
   })
   @IsNotEmpty()
   @IsString()
+  @IsMongoId()
   producto: string;
 
   @ApiProperty({
@@ -17,7 +29,9 @@ export class PedidoItemDto {
   })
   @IsNotEmpty()
   @IsNumber()
+  @IsInt()
   @Min(1)
+  @Type(() => Number)
   cantidad: number;
 }
 
@@ -28,6 +42,7 @@ export class CreatePedidoDto {
   })
   @IsOptional()
   @IsString()
+  @IsMongoId()
   cliente?: string;
 
   @ApiProperty({
@@ -35,6 +50,7 @@ export class CreatePedidoDto {
     description: 'Items del pedido',
   })
   @IsArray()
+  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => PedidoItemDto)
   items: PedidoItemDto[];

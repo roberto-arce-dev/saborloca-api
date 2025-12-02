@@ -36,10 +36,10 @@ export class RegisterDto {
   @ApiProperty({
     example: Role.CLIENTE,
     description: 'Rol del usuario (CLIENTE o PRODUCTOR)',
-    enum: [Role.CLIENTE, Role.PRODUCTOR],
+    enum: Role,
   })
   @IsNotEmpty()
-  @IsEnum([Role.CLIENTE, Role.PRODUCTOR])
+  @IsEnum(Role)
   role: Role;
 
   // Campos comunes (se usan según el rol)
