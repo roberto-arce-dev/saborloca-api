@@ -437,7 +437,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Nombre Actualizado\",\n  \"telefono\": \"+51 987654321\"\n}"
+              "raw": "{\n  \"nombre\": \"Valor de nombre\",\n  \"telefono\": \"+51 900000000\",\n  \"direccion\": \"Valor de direccion\",\n  \"ubicacion\": \"Valor de ubicacion\",\n  \"preferencias\": [\n    \"valor1\",\n    \"valor2\"\n  ]\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/cliente-profile/me",
@@ -529,7 +529,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Nombre Actualizado\",\n  \"telefono\": \"+51 987654321\"\n}"
+              "raw": "{\n  \"nombreNegocio\": \"Valor de nombreNegocio\",\n  \"nombreContacto\": \"Valor de nombreContacto\",\n  \"telefono\": \"+51 900000000\",\n  \"direccion\": \"Valor de direccion\",\n  \"ubicacion\": \"Valor de ubicacion\",\n  \"descripcion\": \"Valor de descripcion\",\n  \"certificaciones\": [\n    \"valor1\",\n    \"valor2\"\n  ],\n  \"categorias\": [\n    \"valor1\",\n    \"valor2\"\n  ],\n  \"isVerified\": true\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/productor-profile/me",

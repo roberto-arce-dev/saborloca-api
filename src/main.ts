@@ -20,14 +20,20 @@ async function bootstrap() {
   await app.register(multipart, {
     limits: { fileSize: 5 * 1024 * 1024 },
   });
+  const staticRoot = join(process.cwd(), 'uploads');
 
   // Configurar archivos estáticos para uploads
   await app.register(fastifyStatic, {
-    root: join(process.cwd(), 'uploads'),
+    root: join(__dirname, '..', 'uploads'),
     prefix: '/uploads/',
+    decorateReply: false,
+  });
+  await app.register(fastifyStatic, {
+    root: staticRoot,
+    prefix: '/api/uploads/',
+    decorateReply: false,
   });
 
-  const configService = app.get(ConfigService);
   app.enableCors();
 
   app.useGlobalPipes(
@@ -39,6 +45,8 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('api');
+
+  const configService = app.get(ConfigService);
 
   const config = new DocumentBuilder()
     .setTitle(process.env.npm_package_name || 'API')
@@ -78,6 +86,7 @@ async function bootstrap() {
   });
   const port = process.env.PORT || configService.get<number>('PORT') || 3000;
   await app.listen(port, '0.0.0.0');
+  console.log(`🖼️ Imágenes: http://localhost:${port}/uploads/<filename> o /api/uploads/<filename>`);
 
   console.log('\n🚀 API: http://localhost:' + port + '/api');
   console.log('📚 Swagger: http://localhost:' + port + '/api/docs\n');
